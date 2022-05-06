@@ -398,7 +398,7 @@ If the Operator is not installed successfully:
 
 ## Running a Compliance Scan
 
-The Compliance Operator creates a CustomResourceDefinition in the cluster called a `ScanSetting` which stores configuration information about compliance scans. The Compliance Operator also creates a few starter `ScanSettings`, including one named `default` that has some reasonable parameters defined or can be modified to suit the requirements of different organizations.
+The Compliance Operator creates a CustomResourceDefinition in the cluster called a ScanSetting which stores configuration information about compliance scans. The Compliance Operator also creates a few starter ScanSettings, including one named `default` that has some reasonable parameters defined or can be modified to suit the requirements of different organizations.
 
 1. **View the `default` ScanSetting:**
 
@@ -428,9 +428,9 @@ The Compliance Operator creates a CustomResourceDefinition in the cluster called
     schedule: 0 1 * * * 
     ```
 
-    This `ScanSetting` tells the Compliance Operator to store the results of three compliance scans in a persistent volume with the size of `1 Gi` and `ReadWriteOnce` access mode. The `.roles` section tells the Compliance Operator which node types to scan if nodes are covered by the profile that will be used. Lastly, the `.scanTolerations.schedule` parameter tells the Compliance Operator when to run. In the screenshot above, the scan will run every day at 01:00.
+    This ScanSetting tells the Compliance Operator to store the results of three compliance scans in a persistent volume with the size of `1 Gi` and `ReadWriteOnce` access mode. The `.roles` section tells the Compliance Operator which node types to scan if nodes are covered by the profile that will be used. Lastly, the `.scanTolerations.schedule` parameter tells the Compliance Operator when to run. In the screenshot above, the scan will run every day at 01:00.
 
-    With the `ScanSetting` defined, you will want to create a `ScanSettingBinding` that binds to it and defines the profiles that will be scanned against.
+    With the ScanSetting defined, you will want to create a ScanSettingBinding that binds to it and defines the profiles that will be scanned against.
 
 1. **Create a file named `ssc-cis.yaml` and insert the following contents:**
 
@@ -453,15 +453,15 @@ The Compliance Operator creates a CustomResourceDefinition in the cluster called
     apiGroup: compliance.openshift.io/v1alpha1
     ```
 
-    Creating this `ScanSettingBinding` will initiate a compliance scan using the `ocp4-cis-node` and `ocp4-cis` profiles and the default `ScanSetting` you looked at above.
+    Creating this ScanSettingBinding will initiate a compliance scan using the `ocp4-cis-node` and `ocp4-cis` profiles and the default ScanSetting you looked at above.
 
 1. **Start a compliance scan by creating the ScanSettingBinding:**
 
     `oc create -f ssb-cis.yaml -n openshift-compliance`
 
-    Creating the `ScanSettingBinding` automatically generates three `ComplianceScan` objects that correspond to the profiles in the `ScanSetting`, one for the overall cluster, one for the control plane nodes, and one for the compute nodes.
+    Creating the ScanSettingBinding automatically generates three ComplianceScan objects that correspond to the profiles in the ScanSetting, one for the overall cluster, one for the control plane nodes, and one for the compute nodes.
 
-    The `ComplianceScan` objects will progress until they reach the `DONE` phase.
+    The ComplianceScan objects will progress until they reach the `DONE` phase.
 
 1. **Check the status of the ComplianceScans:**
 
@@ -492,7 +492,7 @@ The Compliance Operator creates a CustomResourceDefinition in the cluster called
     ocp4-cis-node-master   DONE          INCONSISTENT
     ```
 
-    Once you see a `DONE` phase for each of the three `ComplianceScans`, the scans are completed and you can break out of the command you're watching. 
+    Once you see a `DONE` phase for each of the three ComplianceScans, the scans are completed and you can break out of the command you're watching. 
 
     You will notice that the results for each scan are likely `NON-COMPLIANT` or `INCONSISTENT`. The next step is to dig into which of the policy rules were not met, why they were not met, and which ones are able to be remediated automatically.
 
@@ -1102,7 +1102,7 @@ The OpenShift Compliance operator makes this an easy task with the `oc complianc
 
 ## Remediating issues with the Compliance Operator
 
-Each `ComplianceCheckResult` represents a result of one compliance rule check. If the rule can be remediated automatically, a `ComplianceRemediation` object with the same name, owned by the `ComplianceCheckResult` is created. Unless requested, the remediations are not applied automatically, which gives an OpenShift Container Platform administrator the opportunity to review what the remediation does and only apply a remediation once it has been verified.
+Each ComplianceCheckResult represents a result of one compliance rule check. If the rule can be remediated automatically, a ComplianceRemediation object with the same name, owned by the ComplianceCheckResult is created. Unless requested, the remediations are not applied automatically, which gives an OpenShift Container Platform administrator the opportunity to review what the remediation does and only apply a remediation once it has been verified.
 
 Note: If you run `oc get ScanSetting`, you will see two options: `default` and `default-auto-apply`. Earlier in the demonstration we used the `default` ScanSetting to drive our ComplianceScan. If we would have used `default-auto-apply`, the Compliance Operator would have automatically remediated all issues in the cluster that it could.
 
@@ -1260,7 +1260,7 @@ While we just demonstrated the basics of the OpenShift Compliance Operator, ther
 
 - [Tailored Profiles](https://docs.openshift.com/container-platform/4.10/security/compliance_operator/compliance-operator-tailor.html)
 
-    While the Compliance Operator comes with ready-to-use profiles, they must be modified to fit the organizations’ needs and requirements. The process of modifying a profile is called *tailoring*. The Compliance Operator provides an object to easily tailor profiles called a `TailoredProfile`. This assumes that you are extending a pre-existing profile, and allows you to enable and disable rules and values which come from the `ProfileBundle`.
+    While the Compliance Operator comes with ready-to-use profiles, they must be modified to fit the organizations’ needs and requirements. The process of modifying a profile is called *tailoring*. The Compliance Operator provides an object to easily tailor profiles called a TailoredProfile. This assumes that you are extending a pre-existing profile, and allows you to enable and disable rules and values which come from the ProfileBundle.
 
 - [Unapplying a Remediation](https://docs.openshift.com/container-platform/4.10/security/compliance_operator/compliance-operator-remediation.html#compliance-unapplying_compliance-remediation)
 

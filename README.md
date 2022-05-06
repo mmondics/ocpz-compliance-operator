@@ -1,4 +1,4 @@
-# ocpz-compliance-operator
+# OpenShift Compliance Operator on IBM Z and LinuxONE
  
 The [Compliance Operator](https://docs.openshift.com/container-platform/4.10/security/compliance_operator/compliance-operator-release-notes.html) lets OpenShift Container Platform administrators describe the required compliance state of a cluster and provides them with an overview of gaps and ways to remediate them.
 
@@ -8,13 +8,17 @@ Most of the contents of this repository are pulled directly from the [Compliance
 
 ## Table of Contents
 
-1. [Prerequisites](#prerequisites)
-1. [Understanding the Compliance Operator](#understanding-the-compliance-operator)
-1. [Installing the Compliance Operator](#installing-the-compliance-operator)
-1. [Running a Compliance Scan](#running-a-compliance-scan)
-1. [Retreiving Scan Results](#retreiving-scan-results)
-1. [Additional and Advanced Compliance Operator Tasks](#additional-and-advanced-compliance-operator-tasks)
-1. [More Resources](#more-resources)
+- [OpenShift Compliance Operator on IBM Z and LinuxONE](#openshift-compliance-operator-on-ibm-z-and-linuxone)
+  - [Table of Contents](#table-of-contents)
+  - [Prerequisites](#prerequisites)
+  - [Understanding the Compliance Operator](#understanding-the-compliance-operator)
+  - [Installing the Compliance Operator](#installing-the-compliance-operator)
+  - [Running a Compliance Scan](#running-a-compliance-scan)
+  - [Retreiving Scan Results](#retreiving-scan-results)
+  - [Working with Scan Results](#working-with-scan-results)
+  - [Remediating issues with the Compliance Operator](#remediating-issues-with-the-compliance-operator)
+  - [Additional and Advanced Compliance Operator Tasks](#additional-and-advanced-compliance-operator-tasks)
+  - [More Resources](#more-resources)
 
 ## Prerequisites
 
@@ -1254,8 +1258,37 @@ Note: If you run `oc get ScanSetting`, you will see two options: `default` and `
     ocp4-cis-node-master-kubelet-configure-event-creation   Applied
     ```
 
-Upon the next rescan, which will happen either automatically or by [manually running one](https://docs.openshift.com/container-platform/4.10/security/compliance_operator/compliance-operator-advanced.html#compliance-rescan_compliance-advanced), this ComplianceCheckResult will now PASS. 
+    Upon the next rescan, which will happen either automatically or by [manually running one](https://docs.openshift.com/container-platform/4.10/security/compliance_operator/compliance-operator-advanced.html#compliance-rescan_compliance-advanced), this ComplianceCheckResult will now PASS. 
 
+1. **Re-scan with the ComplianceScan that included the failed ComplianceCheckResult (`ocp4-cis-node-master` in this documentation):**
+
+    `oc annotate compliancescan/ocp4-cis-node-master compliance.openshift.io/rescan=`
+
+    ```text
+    compliancescan.compliance.openshift.io/ocp4-cis-node-master annotated
+    ```
+
+1. **Watch the ComplianceScans until you see it complete:**
+
+    `oc get compliancescan -w | grep master`
+
+    ```text
+    ocp4-cis-node-master   LAUNCHING   NOT-AVAILABLE
+    ocp4-cis-node-master   RUNNING     NOT-AVAILABLE
+    ocp4-cis-node-master   AGGREGATING   NOT-AVAILABLE
+    ocp4-cis-node-master   DONE          INCONSISTENT
+    ```
+
+1. **Check that the ComplianceCheckResult now has a Status of `PASS`:**
+
+    `oc get compliancecheckresult ocp4-cis-node-master-kubelet-configure-event-creation`
+
+    ```text
+    NAME                                                    STATUS   SEVERITY
+    ocp4-cis-node-master-kubelet-configure-event-creation   PASS     medium
+    ```
+
+You've made it to the end of the demonstration and have successfully remediated a compliance issue in your OpenShift cluster. 
 
 ## Additional and Advanced Compliance Operator Tasks 
 

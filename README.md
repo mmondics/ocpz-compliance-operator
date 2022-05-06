@@ -1098,7 +1098,7 @@ The OpenShift Compliance operator makes this an easy task with the `oc complianc
 
     ![report-html](./images/report-html.png)
 
-    For the sake of convenience, the file generated when writing this documentat has been uploaded to this GitHub repository. [You can view it here](./ocp4-cis-api-checks.html).
+    For the sake of convenience, the file generated when writing this documentat has been uploaded to this GitHub repository. [You can view it here](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mmondics/ocpz-compliance-operator/main/ocp4-cis-api-checks.html).
 
     This includes the same information returned by the `oc get` and `oc compliance` commands we used in previous sections, but in a more human-readable format rendered as a webpage. Organizations typically have a more robust compliance monitoring system that would be used instead of a simple html file, but this should give you an idea of how these results can be extracted from OpenShift and sent to whichever solution is utilized.
 

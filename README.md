@@ -28,7 +28,7 @@ The Compliance Operator lets OpenShift Container Platform administrators describ
 
 The Compliance Operator comes with several compliance profiles which represent different compliance benchmarks. For example, the `ocp4-cis` profile represents the Center for Internet Security (CIS) benchmark for Red Hat OpenShift 4.x. 
 
-1. View all available compliance profiles:
+1. **View all available compliance profiles**:
 
     `oc get profiles.compliance -n openshift-compliance`
 
@@ -42,12 +42,12 @@ The Compliance Operator comes with several compliance profiles which represent d
     
     You can look at the details for the compliance profiles to see which rules will be checked.
 
-1. Look at the `ocp4-cis` compliance profile in more detail:
+1. **Look at the `ocp4-cis` compliance profile in more detail**:
 
     `oc get profiles.compliance -n openshift-compliance -o yaml`
 
     <details>
-        <summary>Click to expand (output is ~250 lines)</summary>
+        <summary>Click to expand</summary>
 
     ```yaml
     apiVersion: v1
@@ -320,7 +320,7 @@ The Compliance Operator comes with several compliance profiles which represent d
 
     You can see the list of rules included in the `ocp4-cis` compliance profile. To look at one specific rule, you can do so.
 
-1. Look at the `ocp4-accounts-restrict-service-account-tokens` rule in more detail:
+1. **Look at the `ocp4-accounts-restrict-service-account-tokens` rule in more detail:**
 
     `oc get rules.compliance ocp4-accounts-restrict-service-account-tokens -n openshift-compliance -o yaml`
 
@@ -373,34 +373,34 @@ The Compliance Operator comes with several compliance profiles which represent d
 
 These instructions are taken from the official [Red Hat OpenShift documentation](https://docs.openshift.com/container-platform/4.10/security/compliance_operator/compliance-operator-installation.html#installing-compliance-operator-web-console_compliance-operator-installation).
 
-1. In the OpenShift Container Platform web console, navigate to Operators → OperatorHub.
-1. Search for the Compliance Operator, click its tile, then click Install.
+1. **In the OpenShift Container Platform web console, navigate to Operators → OperatorHub.**
+1. **Search for the Compliance Operator, click its tile, then click Install.**
 
     ![operatorhub-search](./images/operatorhub-search.png)
 
-1. Keep the default selection of Installation mode and namespace to ensure that the Operator will be installed to the openshift-compliance namespace.
+1. **Keep the default selection of Installation mode and namespace to ensure that the Operator will be installed to the openshift-compliance namespace.**
 
     ![install-selections](./images/install-selections.png)
 
-1. Click Install.
+1. **Click Install.**
 
 To confirm that the installation is successful:
 
-1. Navigate to the Operators → Installed Operators
-1. Check that the Compliance Operator is installed in the openshift-compliance namespace and its status is Succeeded.
+1. **Navigate to the Operators → Installed Operators.**
+1. **Check that the Compliance Operator is installed in the openshift-compliance namespace and its status is Succeeded.**
 
     ![installed-operator](./images/installed-operator.png)
 
 If the Operator is not installed successfully:
 
-1. Navigate to the Operators → Installed Operators page and inspect the Status column for any errors or failures.
-1. Navigate to the Workloads → Pods page and check the logs in any pods in the openshift-compliance project that are reporting issues.
+1. **Navigate to the Operators → Installed Operators page and inspect the Status column for any errors or failures.**
+1. **Navigate to the Workloads → Pods page and check the logs in any pods in the openshift-compliance project that are reporting issues.**
 
 ## Running a Compliance Scan
 
 The Compliance Operator creates a CustomResourceDefinition in the cluster called a `ScanSetting` which stores configuration information about compliance scans. The Compliance Operator also creates a few starter `ScanSettings`, including one named `default` that has some reasonable parameters defined or can be modified to suit the requirements of different organizations.
 
-1. Take a look at the `default` `ScanSetting`:
+1. **View the `default` ScanSetting:**
 
     ```bash
     oc get scansetting default -n openshift-compliance -o yaml
@@ -432,7 +432,7 @@ The Compliance Operator creates a CustomResourceDefinition in the cluster called
 
     With the `ScanSetting` defined, you will want to create a `ScanSettingBinding` that binds to it and defines the profiles that will be scanned against.
 
-1. Create a file named `ssc-cis.yaml` and insert the following contents:
+1. **Create a file named `ssc-cis.yaml` and insert the following contents:**
 
     ```yaml
     apiVersion: compliance.openshift.io/v1alpha1
@@ -455,7 +455,7 @@ The Compliance Operator creates a CustomResourceDefinition in the cluster called
 
     Creating this `ScanSettingBinding` will initiate a compliance scan using the `ocp4-cis-node` and `ocp4-cis` profiles and the default `ScanSetting` you looked at above.
 
-1. Start a compliance scan by creating the `ScanSettingBinding`:
+1. **Start a compliance scan by creating the ScanSettingBinding:**
 
     `oc create -f ssb-cis.yaml -n openshift-compliance`
 
@@ -463,7 +463,7 @@ The Compliance Operator creates a CustomResourceDefinition in the cluster called
 
     The `ComplianceScan` objects will progress until they reach the `DONE` phase.
 
-1. Check the status of the `ComplianceScans`:
+1. **Check the status of the ComplianceScans:**
 
     `oc get compliancescan -n openshift-compliance`
 
@@ -498,12 +498,12 @@ The Compliance Operator creates a CustomResourceDefinition in the cluster called
 
 ## Retreiving Scan Results
 
-1. List the results for each policy rule that was checked:
+1. **List the results for each policy rule that was checked:**
 
     `oc get compliancecheckresults -n openshift-compliance`
 
     <details>
-        <summary>Click to expand (output is ~200 lines)</summary>
+        <summary>Click to expand</summary>
 
     ```text
     NAME                                                                           STATUS         SEVERITY
@@ -770,7 +770,7 @@ The Compliance Operator creates a CustomResourceDefinition in the cluster called
     ```
     </details>
 
-1. Narrow down this list by searching only for failed checks that can be remediated automatically:
+1. **Narrow down this list by searching only for failed checks that can be remediated automatically:**
 
     `oc get compliancecheckresults -l 'compliance.openshift.io/check-status=FAIL,compliance.openshift.io/automated-remediation'`
 
@@ -813,7 +813,7 @@ The Compliance Operator creates a CustomResourceDefinition in the cluster called
 
     </details>
 
-1. On the other hand, narrow down the list by searching only for failed checks that must be remediated manuallly:
+1. **On the other hand, narrow down the list by searching only for failed checks that must be remediated manuallly:**
 
     `oc get compliancecheckresults -l 'compliance.openshift.io/check-status=FAIL,!compliance.openshift.io/automated-remediation'`
 
@@ -848,7 +848,7 @@ The Compliance Operator creates a CustomResourceDefinition in the cluster called
 
     If we want to see the reason for a failed compliancecheckresult, we can again use a more targeted `oc get` command. Alternatively, we can use the `oc compliance` tool to see the same information in a more human-readable format.
 
-1. See the reason why a certain check failed:
+1. **See the reason why a certain check failed:**
 
     `oc compliance view-result ocp4-cis-audit-log-forwarding-enabled`
 
@@ -1026,7 +1026,7 @@ Many organizations have some type of compliance tooling already set up in their 
 
 The OpenShift Compliance operator makes this an easy task with the `oc compliance` tool.
 
-1. Download the raw results for the three compliance scans to your current working directory. For the sake of documentation, we are going to use `~/compliance` as the working directory going forward:
+1. **Download the raw results for the three compliance scans to your current working directory. For the sake of documentation, we are going to use `~/compliance` as the working directory going forward:**
 
     `oc compliance fetch-raw scansettingbindings cis-compliance -o ~/compliance`
 
@@ -1062,7 +1062,7 @@ The OpenShift Compliance operator makes this an easy task with the `oc complianc
 
     These `.bzip2` files can be interpreted by SCAP tools either directly or after unzipping with `bunzip2`. Each organization will have its own method of injesting these types of files, but for the sake of simplicity we will be using an OpenSCAP container image that generates an HTML report so we don't have to install any software.
 
-1. Run the following command to generate a HTML report for the `ocp4-cis` ScanResult.
+1. **Run the following command to generate a HTML report for the `ocp4-cis` ScanResult.**
 
     ```text
     podman run \
@@ -1079,7 +1079,7 @@ The OpenShift Compliance operator makes this an easy task with the `oc complianc
     - runs the `oscap xccdf generate report` command on the file `/tmp/ocp4-cis-api-checks-pod.xml.bzip2`
     - and outputs the resulting html file to the local `~/compliance` directory
 
-1. Check that the html file is in your local `~/compliance` directory:
+1. **Check that the html file is in your local `~/compliance` directory:**
 
     `ls ~/compliance`
 
@@ -1088,11 +1088,11 @@ The OpenShift Compliance operator makes this an easy task with the `oc complianc
     ocp4-cis-api-checks.html  pv-extraction-pod.yaml  scan-results  ssc-cis.yaml
     ```
 
-1. Move this html file to your local workstation to allow it to be opened in a web browser.
+1. **Move this html file to your local workstation to allow it to be opened in a web browser.**
 
     You can use `rsync`, `scp`, or an FTP application like [FileZilla](https://filezilla-project.org/).
 
-1. Open the html file in a web browser once it's on your local workstation
+1. **Open the html file in a web browser once it's on your local workstation.**
 
     ![report-html](./images/report-html.png)
 
@@ -1106,7 +1106,7 @@ Each `ComplianceCheckResult` represents a result of one compliance rule check. I
 
 Note: If you run `oc get ScanSetting`, you will see two options: `default` and `default-auto-apply`. Earlier in the demonstration we used the `default` ScanSetting to drive our ComplianceScan. If we would have used `default-auto-apply`, the Compliance Operator would have automatically remediated all issues in the cluster that it could.
 
-1. Check which ComplianceRemediation objects we have in our project:
+1. **Check which ComplianceRemediation objects we have in our project:**
 
     `oc get complianceremediation -n openshift-compliance`
 
@@ -1181,7 +1181,7 @@ Note: If you run `oc get ScanSetting`, you will see two options: `default` and `
 
     As always, you can see more detail about a specific ComplianceRemediation object with a more specified `oc get` command.
 
-1. Look at one of the ComplianceRemediation objects, such as: 
+1. **Look at one of the ComplianceRemediation objects, such as:** 
 
     `oc get complianceremediation ocp4-cis-node-master-kubelet-configure-event-creation -o yaml`
 
@@ -1220,7 +1220,7 @@ Note: If you run `oc get ScanSetting`, you will see two options: `default` and `
     applicationState: NotApplied
     ```
 
-1. See how this ComplianceRemediation matches a ComplianceCheckResult that is able to be automatically remediated:
+1. **See how this ComplianceRemediation matches a ComplianceCheckResult that is able to be automatically remediated:**
 
     `oc get compliancecheckresult ocp4-cis-node-master-kubelet-configure-event-creation -n openshift-compliance`
 
@@ -1232,7 +1232,7 @@ Note: If you run `oc get ScanSetting`, you will see two options: `default` and `
 
     ***Important! In this rest of this section, you will be told to apply `oc patch` commands that have the potential to allow the Compliance Operator to directly affect your OpenShift cluster and reboot nodes at its own will. Either proceed with caution or simply read through the instructions without entering the commands in your own system.***
 
-1. To apply a the ComplianceRemediation, run the following `oc patch` command:
+1. **To apply a the ComplianceRemediation, run the following `oc patch` command:**
 
     `oc patch complianceremediation/ocp4-cis-node-master-kubelet-configure-event-creation --patch '{"spec":{"apply":true}}' --type=merge`
 

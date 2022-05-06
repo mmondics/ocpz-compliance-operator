@@ -13,13 +13,14 @@ Most of the contents of this repository are pulled directly from the [Compliance
 1. [Installing the Compliance Operator](#installing-the-compliance-operator)
 1. [Running a Compliance Scan](#running-a-compliance-scan)
 1. [Retreiving Scan Results](#retreiving-scan-results)
-1. [Tailoring the Compliance Operator](#tailoring-the-compliance-operator)
+1. [Additional and Advanced Compliance Operator Tasks](#additional-and-advanced-compliance-operator-tasks)
+1. [More Resources](#more-resources)
 
 ## Prerequisites
 
 1. OpenShift 4.10+ on IBM Z or LinuxONE
 1. Cluster administrator privileges
-1. [`oc compliance` binary installed](https://docs.openshift.com/container-platform/4.10/security/compliance_operator/oc-compliance-plug-in-using.html#installing-oc-compliance_oc-compliance-plug-in-understanding)
+1. `oc compliance` binary [installed](https://docs.openshift.com/container-platform/4.10/security/compliance_operator/oc-compliance-plug-in-using.html#installing-oc-compliance_oc-compliance-plug-in-understanding)
 1. The ability to move an application from a remote server to your local workstation using a tool such as `rsync`, `scp`, or an FTP application like [FileZilla](https://filezilla-project.org/)
 
 ## Understanding the Compliance Operator
@@ -1277,3 +1278,13 @@ While we just demonstrated the basics of the OpenShift Compliance Operator, ther
 - [Troubleshooting the Compliance Operator](https://docs.openshift.com/container-platform/4.10/security/compliance_operator/compliance-operator-troubleshooting.html)
 
 - And many more... see the full documentation [here](https://docs.openshift.com/container-platform/4.10/security/compliance_operator/compliance-operator-release-notes.html)
+
+## More Resources
+
+- Lab/Workshop [Compliance Operator lab](https://github.com/openshift/compliance-operator/tree/master/doc/tutorials)
+
+- Video: [OpenShift Office Hours covering the Compliance Operator and compliance in general](https://www.youtube.com/watch?v=a7WzEvPfsAI)
+
+- Blog: [How does Compliance Operator work for OpenShift? (Part 1)](https://cloud.redhat.com/blog/how-does-compliance-operator-work-for-openshift-part-1)
+
+- Blog: [How does Compliance Operator work for OpenShift? (Part 2)](https://cloud.redhat.com/blog/how-does-compliance-operator-work-for-openshift-part-2)

@@ -1088,7 +1088,7 @@ The OpenShift Compliance operator makes this an easy task with the `oc complianc
 
 3. **Check that the html file is in your local `~/compliance` directory:**
 
-    `ls ~/compliance`
+    `ls -l ~/compliance/ocp4-cis-api-checks.html`
 
     ```text
     [mmondics@ocpd2bn1 ~]$ ls ~/compliance

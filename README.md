@@ -4,7 +4,7 @@ The [Compliance Operator](https://docs.openshift.com/container-platform/4.10/sec
 
 As of OpenShift version 4.10, the Compliance Operator is [supported on IBM Z and LinuxONE clusters](https://access.redhat.com/errata/RHBA-2022:1148).
 
-Most of the contents of this repository are pulled directly from the [Compliance Operator documentation](https://docs.openshift.com/container-platform/4.10/security/compliance_operator/compliance-operator-understanding.html) along with some information and instruction from [this blog](https://blog.stderr.at/compliance/2021/07/compliance-operator/).
+This demonstration expands on the instructions on various pages of the official [Compliance Operator documentation](https://docs.openshift.com/container-platform/4.10/security/compliance_operator/compliance-operator-understanding.html).
 
 ## Table of Contents
 
@@ -374,11 +374,13 @@ The Compliance Operator comes with several compliance profiles which represent d
     title: Restrict Automounting of Service Account Tokens
     ```
 
+    The YAML file for the compliance rule provides details about what the rule checks for, how to check for compliance manually, which compliance profiles include this rule, a rationale for why the rule exists, and more.
+
 ## Installing the Compliance Operator
 
 These instructions are taken from the official [Red Hat OpenShift documentation](https://docs.openshift.com/container-platform/4.10/security/compliance_operator/compliance-operator-installation.html#installing-compliance-operator-web-console_compliance-operator-installation).
 
-1. **In the OpenShift Container Platform web console, navigate to Operators → OperatorHub.**
+1. **In the OpenShift Container Platform web console menu, navigate to Operators → OperatorHub.**
 1. **Search for the Compliance Operator, click its tile, then click Install.**
 
     ![operatorhub-search](./images/operatorhub-search.png)
@@ -503,7 +505,7 @@ The Compliance Operator creates a CustomResourceDefinition in the cluster called
 
 ## Retreiving Scan Results
 
-1. **List the results for each policy rule that was checked:**
+1. **List the results for each policy rule that was checked as a part of the ComplianceScan:**
 
     `oc get compliancecheckresults -n openshift-compliance`
 
@@ -775,7 +777,7 @@ The Compliance Operator creates a CustomResourceDefinition in the cluster called
     ```
     </details>
 
-1. **Narrow down this list by searching only for failed checks that can be remediated automatically:**
+1. **Narrow down this list by searching only for failed checks that can be automatically remediated by the OpenShift Compliance Operator:**
 
     `oc get compliancecheckresults -l 'compliance.openshift.io/check-status=FAIL,compliance.openshift.io/automated-remediation'`
 
@@ -839,7 +841,7 @@ The Compliance Operator creates a CustomResourceDefinition in the cluster called
     ```
     </details>
 
-    In the tables above, the Status column is one of the following:
+    In the outputs above, the Status column is one of the following:
 
     | ComplianceCheckResult Status | Description                                                                                                       |
     |------------------------------|-------------------------------------------------------------------------------------------------------------------|
@@ -851,13 +853,13 @@ The Compliance Operator creates a CustomResourceDefinition in the cluster called
     | ERROR                        | Compliance check ran, but could not complete properly.                                                            |
     | NOT-APPLICABLE               | Compliance check did not run because it is not applicable or not selected.                                        |
 
-    If we want to see the reason for a failed compliancecheckresult, we can again use a more targeted `oc get` command. Alternatively, we can use the `oc compliance` tool to see the same information in a more human-readable format.
+    If we want to see the reason for a failed ComplianceCheckResult, we can again use a more targeted `oc get` command. Alternatively, we can use the `oc compliance` tool to see the same information in a more human-readable format.
 
 1. **See the reason why a certain check failed:**
 
     `oc compliance view-result ocp4-cis-audit-log-forwarding-enabled`
 
-    *Note: If this compliancecheckresult did not fail in your cluster, you should run the command on a different one.*
+    *Note: If this ComplianceCheckResult did not fail in your cluster, you should run the command on a different one.*
     
     <details>
     <summary>Click to expand</summary>
@@ -1033,7 +1035,7 @@ The OpenShift Compliance operator makes this an easy task with the `oc complianc
 
 1. **Download the raw results for the three compliance scans to your current working directory. For the sake of documentation, we are going to use `~/compliance` as the working directory going forward:**
 
-    `oc compliance fetch-raw scansettingbindings cis-compliance -o ~/compliance`
+    `oc compliance fetch-raw scansettingbindings cis-compliance -n openshift-compliance -o ~/compliance`
 
     ```text
     Fetching results for cis-compliance scans: ocp4-cis-node-master, ocp4-cis-node-worker, ocp4-cis
@@ -1048,7 +1050,7 @@ The OpenShift Compliance operator makes this an easy task with the `oc complianc
     You now have `.bzip2` files for each scan result in three subdirectories:
 
     ```text
-    [mmondics@ocpd2bn1 compliance]$ tree ~/compliance/scan-results/ 
+    [mmondics@ocpd2bn1 compliance]$ tree ~/compliance
     .
     |-- masters-scan-results
     |   `-- 0
@@ -1067,11 +1069,11 @@ The OpenShift Compliance operator makes this an easy task with the `oc complianc
 
     These `.bzip2` files can be interpreted by SCAP tools either directly or after unzipping with `bunzip2`. Each organization will have its own method of injesting these types of files, but for the sake of simplicity we will be using an OpenSCAP container image that generates an HTML report so we don't have to install any software.
 
-1. **Run the following command to generate a HTML report for the `ocp4-cis` ScanResult.**
+2. **Run the following command to generate a HTML report for the `ocp4-cis` ScanResult.**
 
     ```text
-    podman run \
-    -v ~/compliance/scan-results/ocp4-cis:/tmp \
+    podman run --privileged \
+    -v ~/compliance/ocp4-cis:/tmp \
     registry.access.redhat.com/rhel7/openscap:7.9.13-5 \
     oscap xccdf generate report \
     /tmp/ocp4-cis-api-checks-pod.xml.bzip2 >> ~/compliance/ocp4-cis-api-checks.html
@@ -1084,7 +1086,7 @@ The OpenShift Compliance operator makes this an easy task with the `oc complianc
     - runs the `oscap xccdf generate report` command on the file `/tmp/ocp4-cis-api-checks-pod.xml.bzip2`
     - and outputs the resulting html file to the local `~/compliance` directory
 
-1. **Check that the html file is in your local `~/compliance` directory:**
+3. **Check that the html file is in your local `~/compliance` directory:**
 
     `ls ~/compliance`
 
@@ -1095,11 +1097,11 @@ The OpenShift Compliance operator makes this an easy task with the `oc complianc
 
     If you're running the `oc` and `oc compliance` binaries on a Linux server that does not have a web browser installed (such as your bastion server), you will need to move the html file onto your local workstation in order to open it in a browser. If you are already using your local workstation to run the `oc` and `oc compliance` binaries, you can skip the following step. 
 
-1. **Move this html file to your local workstation to allow it to be opened in a web browser.**
+4. **Move this html file to your local workstation to allow it to be opened in a web browser.**
 
     You can use `rsync`, `scp`, or an FTP application like [FileZilla](https://filezilla-project.org/).
 
-1. **Open the html file in a web browser once it's on your local workstation.**
+5. **Open the html file in a web browser once it's on your local workstation.**
 
     ![report-html](./images/report-html.png)
 

@@ -439,7 +439,7 @@ The Compliance Operator creates a CustomResourceDefinition in the cluster called
 
     With the ScanSetting defined, you will want to create a ScanSettingBinding that binds to it and defines the profiles that will be scanned against.
 
-1. **Create a file named `ssc-cis.yaml` and insert the following contents:**
+1. **Create a file named `ssb-cis.yaml` and insert the following contents:**
 
     ```yaml
     apiVersion: compliance.openshift.io/v1alpha1
@@ -1092,7 +1092,7 @@ The OpenShift Compliance operator makes this an easy task with the `oc complianc
 
     ```text
     [mmondics@ocpd2bn1 ~]$ ls ~/compliance
-    ocp4-cis-api-checks.html  pv-extraction-pod.yaml  scan-results  ssc-cis.yaml
+    ocp4-cis-api-checks.html  pv-extraction-pod.yaml  scan-results  ssb-cis.yaml
     ```
 
     If you're running the `oc` and `oc compliance` binaries on a Linux server that does not have a web browser installed (such as your bastion server), you will need to move the html file onto your local workstation in order to open it in a browser. If you are already using your local workstation to run the `oc` and `oc compliance` binaries, you can skip the following step. 

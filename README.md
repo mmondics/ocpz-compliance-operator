@@ -445,8 +445,8 @@ The Compliance Operator creates a CustomResourceDefinition in the cluster called
     apiVersion: compliance.openshift.io/v1alpha1
     kind: ScanSettingBinding
     metadata:
-    name: cis-compliance
-    namespace: openshift-compliance
+      name: cis-compliance
+      namespace: openshift-compliance
     profiles:
     - name: ocp4-cis-node
         kind: Profile
@@ -455,9 +455,9 @@ The Compliance Operator creates a CustomResourceDefinition in the cluster called
         kind: Profile
         apiGroup: compliance.openshift.io/v1alpha1
     settingsRef:
-    name: default
-    kind: ScanSetting
-    apiGroup: compliance.openshift.io/v1alpha1
+      name: default
+      kind: ScanSetting
+      apiGroup: compliance.openshift.io/v1alpha1
     ```
 
     Creating this ScanSettingBinding will initiate a compliance scan using the `ocp4-cis-node` and `ocp4-cis` profiles and the default ScanSetting you looked at above.
